@@ -1,0 +1,23 @@
+name: Print Environment Variables
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'dev'
+
+jobs:
+  print-env-vars:
+    runs-on: ubuntu-latest
+    env:
+      DEV_VAR_1: ${{ secrets.secret }}
+      DEV_VAR_2: ${{ vars.var }}
+    steps:
+    - name: Print Environment Variables
+      if: ${{ github.event.inputs.environment == 'dev' }}
+      run: |
+        echo "Printing Dev Environment Variables:"
+        echo "DEV_VAR_1 (from secrets): $DEV_VAR_1"
+        echo "DEV_VAR_2 (from vars): $DEV_VAR_2"
