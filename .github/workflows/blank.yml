@@ -11,13 +11,17 @@ on:
 jobs:
   print-env-vars:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: 'dev'
     env:
-      DEV_VAR_1: ${{ secrets.secret }}
-      DEV_VAR_2: ${{ vars.var }}
+      VAR_1: ${{ secrets.SECRET }}
+      VAR_2: ${{ vars.VARS }}
     steps:
     - name: Print Environment Variables
       if: ${{ github.event.inputs.environment == 'dev' }}
       run: |
         echo "Printing Dev Environment Variables:"
-        echo "DEV_VAR_1 (from secrets): $DEV_VAR_1"
-        echo "DEV_VAR_2 (from vars): $DEV_VAR_2"
+        echo "secret: ${{ secrets.SECRET }}"
+        echo "varVAR ${{ vars.VARS }}"
