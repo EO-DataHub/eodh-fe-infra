@@ -15,7 +15,6 @@ variable "environments" {
     }
   }
 }
-
 module "front" {
   depends_on      = [aws_route53_zone.test]
   for_each        = var.environments
