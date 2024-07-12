@@ -1,6 +1,11 @@
 variable "environments" {
   type    = list(string)
-  default = ["dev", "qa", "staging"]
+  default = [
+    "dev",
+    "qa",
+    "staging",
+    "storybook"
+  ]
 }
 
 module "front" {
