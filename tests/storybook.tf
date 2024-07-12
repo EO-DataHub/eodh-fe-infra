@@ -5,10 +5,6 @@ resource "aws_wafv2_ip_set" "allowed_ips" {
   ip_address_version = "IPV4"
   addresses          = var.allowed_ips
 }
-import {
-  to = aws_wafv2_ip_set.allowed_ips
-  id = "6f35ef9b-6404-4719-b821-7b438a732a6e/storybook_allowed_ips/CLOUDFRONT"
-}
 resource "aws_wafv2_web_acl" "storybook_allowed_ips" {
   name        = "storybook_allowed_ips"
   description = "storybook_allowed_ips"
@@ -43,11 +39,4 @@ resource "aws_wafv2_web_acl" "storybook_allowed_ips" {
     metric_name                = "storybook_allowed_ips"
     sampled_requests_enabled   = true
   }
-}
-
-
-
-import {
-  to = aws_wafv2_web_acl.storybook_allowed_ips
-  id = "7e33cd3c-eac4-4563-b17a-3b95e8d3a79f/storybook_allowed_ips/CLOUDFRONT"
 }
