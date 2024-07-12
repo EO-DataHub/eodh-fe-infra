@@ -113,6 +113,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 resource "aws_cloudfront_distribution" "cf_front" {
+  web_acl_id = var.web_acl_arn
   comment = "${var.env}.${var.domain}"
   origin {
     origin_id                = aws_s3_bucket.s3_cf.bucket_regional_domain_name
