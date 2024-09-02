@@ -1,6 +1,9 @@
-output "asg_name" {
-  value = aws_autoscaling_group.ecs_asg.name
+output "ecs-task-execution-role" {
+  value = aws_iam_role.ecs-task-execution-role.arn
 }
-output "fileuoploader2s3" {
-  value = aws_iam_role.fileuploader2s3-role.arn
+output "ecs-cluster-name" {
+  value = aws_ecs_cluster.cluster.name
+}
+output "ecs-cluster-arn" {
+  value = aws_ecs_cluster.cluster.arn
 }
