@@ -3,16 +3,20 @@ variable "environments" {
   type = map(any)
   default = {
     dev = {
-      name = "dev"
+      name       = "dev"
+      create_ecs = true
     },
     qa = {
-      name = "qa"
+      name       = "qa"
+      create_ecs = true
     },
     staging = {
-      name = "staging"
+      name       = "staging"
+      create_ecs = true
     },
     storybook = {
-      name = "storybook"
+      name       = "storybook"
+      create_ecs = false
     }
   }
 }
