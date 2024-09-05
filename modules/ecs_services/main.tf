@@ -1,13 +1,13 @@
 resource "aws_cloudwatch_log_group" "log_group" {
   retention_in_days = 7
-  name              = "/ecs/${var.service_name}"
+  name              = "/ecs/${var.env}_${var.service_name}"
   tags = {
-    Name = "${var.service_name}_lg"
+    Name = "${var.env}_${var.service_name}_lg"
 
   }
 }
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.service_name}_ecs_task_execution_role"
+  name = "${var.env}_${var.service_name}_ecs_task_execution_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -30,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
 
 resource "aws_ecs_task_definition" "task_definition" {
   depends_on               = [aws_iam_role.ecs_task_execution_role]
-  family                   = var.service_name
+  family                   = "${var.env}_${var.service_name}"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -39,7 +39,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   memory                   = var.memory_allocation
   container_definitions = jsonencode([
     {
-      name : var.service_name,
+      name : "${var.env}_${var.service_name}",
       image : "${var.ecr_repo}/${var.service_name}:latest", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
       cpu : var.cpu_allocation,
       memoryReservation : var.memory_allocation,
@@ -65,7 +65,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     }
   ])
   tags = {
-    Name = var.service_name
+    Name = "${var.env}_${var.service_name}"
   }
 }
 /*resource "aws_lb_target_group" "service_tg" {
@@ -149,7 +149,7 @@ resource "aws_ecs_service" "service" {
 }
 resource "aws_security_group" "task_sg" {
   vpc_id = var.vpc_id
-  name   = "${var.env}_sg"
+  name   = "${var.env}_${var.service_name}_sg"
   egress {
     from_port = 0
     to_port   = 0
@@ -159,6 +159,6 @@ resource "aws_security_group" "task_sg" {
     ]
   }
   tags = {
-    Name = "${var.env}_sg"
+    Name = "${var.env}_${var.service_name}_sg"
   }
 }
