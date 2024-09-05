@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 resource "aws_ecs_task_definition" "task_definition" {
   family                   = var.service_name
   task_role_arn            = var.task_role_arn
-  network_mode             = "bridge"
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   skip_destroy             = true
   container_definitions = jsonencode([
