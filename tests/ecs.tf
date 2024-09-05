@@ -11,7 +11,7 @@ module "ecs_service_dev" {
   env               = "dev"
   cpu_allocation    = 21
   memory_allocation = 256
-  service_name      = "dev_ac-api"
+  service_name      = "dev_ac_api"
   service_port      = "8000"
   region            = var.region
 }
