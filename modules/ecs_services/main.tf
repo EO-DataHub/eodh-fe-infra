@@ -41,6 +41,8 @@ resource "aws_ecs_task_definition" "task_definition" {
     {
       name : var.service_name,
       image : "${var.ecr_repo}/${var.service_name}:latest", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
+      cpu : var.cpu_allocation,
+      memoryReservation : var.memory_allocation,
       essential : true,
       portMappings : [
         {
