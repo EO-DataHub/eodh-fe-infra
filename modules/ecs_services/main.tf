@@ -119,7 +119,6 @@ resource "aws_ecs_service" "service" {
   task_definition                    = aws_ecs_task_definition.task_definition.arn
   desired_count                      = var.desired_task_count
   wait_for_steady_state              = false
-  health_check_grace_period_seconds  = 360
   enable_ecs_managed_tags            = true
   deployment_minimum_healthy_percent = 100
   deployment_controller {
