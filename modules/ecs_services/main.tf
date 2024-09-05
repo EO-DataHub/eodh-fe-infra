@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       portMappings : [
         {
           containerPort : tonumber(var.service_port),
-          hostPort : 0,
+          hostPort : tonumber(var.service_port),
           protocol : "tcp"
         }
       ],
