@@ -5,7 +5,9 @@ variable "service_port" {}
 variable "cpu_allocation" {}
 variable "memory_allocation" {}
 variable "ecr_repo" { default = "058264362748.dkr.ecr.eu-west-1.amazonaws.com" }
-//variable "vpc_id" {}
+variable "vpc_id" {}
+variable "subnet_ids" {}
+variable "assign_public_ip" { default = false }
 //variable "rule_priority" {}
 //variable "listener" {}
 variable "ecs_cluster_arn" {}

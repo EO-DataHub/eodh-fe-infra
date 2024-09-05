@@ -113,7 +113,7 @@ resource "aws_lb_listener_rule" "rule" {
 
  */
 resource "aws_ecs_service" "service" {
-  //  depends_on                         = [aws_lb_target_group.service_tg, aws_lb_listener_rule.rule]
+  depends_on                         = [aws_security_group.task_sg]
   name                               = var.service_name
   cluster                            = var.ecs_cluster_arn
   task_definition                    = aws_ecs_task_definition.task_definition.arn
@@ -136,10 +136,29 @@ resource "aws_ecs_service" "service" {
     field = "instanceId"
     type  = "spread"
   }
-
+  network_configuration {
+    subnets          = var.subnet_ids
+    security_groups  = [aws_security_group.task_sg.id]
+    assign_public_ip = var.assign_public_ip
+  }
   /*  load_balancer {
     target_group_arn = aws_lb_target_group.service_tg.arn
     container_name   = var.service_name
     container_port   = var.service_port
   }*/
+}
+resource "aws_security_group" "task_sg" {
+  vpc_id = var.vpc_id
+  name   = "${var.env}_sg"
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0",
+    ]
+  }
+  tags = {
+    Name = "${var.env}_sg"
+  }
 }

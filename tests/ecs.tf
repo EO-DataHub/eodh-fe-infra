@@ -14,4 +14,6 @@ module "ecs_service_dev" {
   service_name      = "dev_ac_api"
   service_port      = "8000"
   region            = var.region
+  vpc_id            = module.vpc_tests.vpc_id
+  subnet_ids = module.vpc_tests.priv_subnets
 }
