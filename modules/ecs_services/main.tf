@@ -35,12 +35,12 @@ resource "aws_ecs_task_definition" "task_definition" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   skip_destroy             = true
+  cpu                      = var.cpu_allocation
+  memory                   = var.memory_allocation
   container_definitions = jsonencode([
     {
       name : var.service_name,
       image : "${var.ecr_repo}/${var.service_name}:latest", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
-      cpu : var.cpu_allocation,
-      memoryReservation : var.memory_allocation,
       essential : true,
       portMappings : [
         {
