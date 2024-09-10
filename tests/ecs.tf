@@ -15,7 +15,8 @@ module "ecs_service_dev" {
   env               = "dev"
   cpu_allocation    = 256
   memory_allocation = 512
-  service_name      = "ac-api"
+  service_name      = "ac_api"
+  ecr_name          = "ac-api"
   service_port      = "8000"
   region            = var.region
   vpc_id            = module.vpc_tests.vpc_id
