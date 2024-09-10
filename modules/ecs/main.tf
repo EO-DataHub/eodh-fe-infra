@@ -1,4 +1,4 @@
-resource "aws_service_discovery_service" "discovery_service" {
+resource "aws_service_discovery_http_namespace" "discovery_service" {
   for_each = {
     for key, env in var.environments : key => env
     if env.create_ecs == true
@@ -7,7 +7,7 @@ resource "aws_service_discovery_service" "discovery_service" {
 
 }
 resource "aws_ecs_cluster" "cluster" {
-  depends_on = [aws_service_discovery_service.discovery_service]
+  depends_on = [aws_service_discovery_http_namespace.discovery_service]
   for_each = {
     for key, env in var.environments : key => env
     if env.create_ecs == true
@@ -17,7 +17,7 @@ resource "aws_ecs_cluster" "cluster" {
     value = "disabled"
   }
   service_connect_defaults {
-    namespace = aws_service_discovery_service.discovery_service[each.value.name].arn
+    namespace = aws_service_discovery_http_namespace.discovery_service[each.value.name].arn
   }
   name = each.value.name
 }
