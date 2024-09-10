@@ -15,5 +15,5 @@ module "ecs_service_dev" {
   service_port      = "8000"
   region            = var.region
   vpc_id            = module.vpc_tests.vpc_id
-  subnet_ids        = module.vpc_tests.priv_subnets
+  subnet_ids        = module.vpc_tests.pub_subnets
 }
