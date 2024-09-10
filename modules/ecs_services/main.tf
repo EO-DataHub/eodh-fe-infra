@@ -128,6 +128,9 @@ resource "aws_ecs_service" "service" {
   //launch_type                        = "FARGATE"
   capacity_provider_strategy {
     capacity_provider = "FARGATE"
+    base = 1
+    weight = 100
+
   }
   deployment_controller {
     type = "ECS"
