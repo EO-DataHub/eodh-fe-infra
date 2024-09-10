@@ -21,3 +21,19 @@ resource "aws_ecs_cluster" "cluster" {
   }
   name = each.value.name
 }
+resource "aws_ecs_cluster_capacity_providers" "default_providers" {
+  depends_on = [aws_ecs_cluster.cluster]
+  for_each = {
+    for key, env in var.environments : key => env
+    if env.create_ecs == true
+  }
+  cluster_name = aws_ecs_cluster.cluster[each.value.name].name
+
+  capacity_providers = ["FARGATE"]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "FARGATE"
+  }
+}
