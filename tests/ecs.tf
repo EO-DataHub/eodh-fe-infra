@@ -21,11 +21,3 @@ module "ecs_service_dev" {
   vpc_id            = module.vpc_tests.vpc_id
   subnet_ids        = module.vpc_tests.pub_subnets
 }
-import {
-  to = aws_ecs_cluster.cluster["dev"]
-  id = "dev"
-}
-import {
-  to = module.ecs_service_dev.aws_ecs_service.service
-  id = "dev/ac-api"
-}
