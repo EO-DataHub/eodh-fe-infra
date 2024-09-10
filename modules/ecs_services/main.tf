@@ -125,7 +125,10 @@ resource "aws_ecs_service" "service" {
   wait_for_steady_state              = false
   enable_ecs_managed_tags            = true
   deployment_minimum_healthy_percent = 100
-  launch_type                        = "FARGATE"
+  //launch_type                        = "FARGATE"
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+  }
   deployment_controller {
     type = "ECS"
   }
