@@ -37,6 +37,10 @@ resource "aws_ecs_task_definition" "task_definition" {
   skip_destroy             = true
   cpu                      = var.cpu_allocation
   memory                   = var.memory_allocation
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
   container_definitions = jsonencode([
     {
       name : "${var.env}_${var.service_name}",
@@ -121,13 +125,17 @@ resource "aws_ecs_service" "service" {
   wait_for_steady_state              = false
   enable_ecs_managed_tags            = true
   deployment_minimum_healthy_percent = 100
+  capacity_provider_strategy {
+    capacity_provider = ""
+  }
   deployment_controller {
     type = "ECS"
   }
   deployment_circuit_breaker {
-    enable   = false
-    rollback = false
+    enable   = true
+    rollback = true
   }
+  /*
   ordered_placement_strategy {
     field = "attribute:ecs.availability-zone"
     type  = "spread"
@@ -135,7 +143,7 @@ resource "aws_ecs_service" "service" {
   ordered_placement_strategy {
     field = "instanceId"
     type  = "spread"
-  }
+  }*/
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = [aws_security_group.task_sg.id]
