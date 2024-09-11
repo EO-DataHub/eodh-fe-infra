@@ -22,4 +22,5 @@ module "alb" {
   name            = "ac-api"
   pub_alb_subnets = module.vpc_tests.pub_subnets
   vpc_id          = module.vpc_tests.vpc_id
+  alb_cert_arn    = module.acm_alb.acm_cert_arn
 }
