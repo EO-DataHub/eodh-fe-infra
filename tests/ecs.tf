@@ -29,13 +29,9 @@ module "ecs_service_dev" {
   service_port      = "8000"
   region            = var.region
   vpc_id            = module.vpc_tests.vpc_id
-  subnet_ids        = module.vpc_tests.pub_subnets
-  assign_public_ip  = true
+  subnet_ids        = module.vpc_tests.priv_subnets
+
 }
-/*import {
-  to = aws_service_discovery_private_dns_namespace.qa
-  id = "ns-3cx56mc2k4zgmete:${module.vpc_tests.vpc_id}"
-}*/
 module "ecs" {
   source       = "../modules/ecs"
   environments = var.environments
