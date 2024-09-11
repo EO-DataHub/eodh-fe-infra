@@ -128,8 +128,8 @@ resource "aws_ecs_service" "service" {
   //launch_type                        = "FARGATE"
   capacity_provider_strategy {
     capacity_provider = "FARGATE"
-    base = 1
-    weight = 100
+    base              = 1
+    weight            = 100
 
   }
   deployment_controller {
@@ -153,9 +153,9 @@ resource "aws_ecs_service" "service" {
     security_groups  = [aws_security_group.task_sg.id]
     assign_public_ip = var.assign_public_ip
   }
-    load_balancer {
+  load_balancer {
     target_group_arn = aws_lb_target_group.service_tg.arn
-    container_name   = var.service_name
+    container_name   = "${var.env}_${var.service_name}"
     container_port   = var.service_port
   }
 }
