@@ -18,4 +18,3 @@ variable "task_role_arn" { default = null }
 variable "desired_task_count" { default = 1 }
 //variable "healthcheck_path" {default = "/actuator/health"}
 variable "region" {}
-variable "ecr_name" {}
