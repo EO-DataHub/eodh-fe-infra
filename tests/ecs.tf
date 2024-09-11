@@ -9,7 +9,7 @@ module "ecs_service_dev" {
   region            = var.region
   vpc_id            = module.vpc_tests.vpc_id
   subnet_ids        = module.vpc_tests.priv_subnets
-  listener          = module.alb.listener_80
+  listener          = module.alb.listener_443
   rule_priority     = "1"
 }
 module "ecs" {

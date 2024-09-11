@@ -7,4 +7,7 @@ output "alb_name" {
 output "listener_80" {
   value = aws_lb_listener.listener_80.arn
 }
+output "listener_443" {
+  value = aws_lb_listener.listener_443.arn
+}
 
