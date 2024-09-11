@@ -30,6 +30,7 @@ module "ecs_service_dev" {
   region            = var.region
   vpc_id            = module.vpc_tests.vpc_id
   subnet_ids        = module.vpc_tests.pub_subnets
+  assign_public_ip  = true
 }
 /*import {
   to = aws_service_discovery_private_dns_namespace.qa
