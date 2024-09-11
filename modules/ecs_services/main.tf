@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   }
 }
 resource "aws_lb_target_group" "service_tg" {
-  name                 = var.service_name
+  name                 = "${var.env}-${var.service_name}"
   deregistration_delay = 30
   port                 = 8000
   protocol             = "HTTP"
@@ -172,5 +172,23 @@ resource "aws_security_group" "task_sg" {
   }
   tags = {
     Name = "${var.env}_${var.service_name}_sg"
+  }
+}
+resource "aws_lb_listener_rule" "rule" {
+
+  listener_arn = var.listener
+  priority     = var.rule_priority
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.service_tg.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+  tags = {
+    Name = var.service_name
   }
 }

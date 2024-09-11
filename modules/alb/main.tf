@@ -43,3 +43,16 @@ resource "aws_lb" "alb" {
   subnets                    = var.pub_alb_subnets
   enable_deletion_protection = false
 }
+resource "aws_lb_listener" "listener_80" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 80
+  protocol          = "HTTP"
+  default_action {
+    type             = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Access denied"
+      status_code  = "403"
+    }
+  }
+}
