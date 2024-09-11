@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   container_definitions = jsonencode([
     {
       name : "${var.env}_${var.service_name}",
-      image : "${var.ecr_repo}/${var.ecr_name}:latest", //image : "${var.ecr_repo}/${var.ecr_name}:${var.env}",
+      image : "${var.ecr_repo}/${var.service_name}:latest", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
       cpu : var.cpu_allocation,
       memoryReservation : var.memory_allocation,
       essential : true,
@@ -72,20 +72,20 @@ resource "aws_ecs_task_definition" "task_definition" {
     Name = "${var.env}_${var.service_name}"
   }
 }
-/*resource "aws_lb_target_group" "service_tg" {
+resource "aws_lb_target_group" "service_tg" {
   name                 = var.service_name
   deregistration_delay = 30
-  port                 = 80
+  port                 = 8000
   protocol             = "HTTP"
-  target_type          = "instance"
+  target_type          = "ip"
   health_check {
-    path                = "/${var.service_name}${var.healthcheck_path}"
+    path                = "/"
     protocol            = "HTTP"
     healthy_threshold   = 2
-    timeout             = 30
+    timeout             = 10
     interval            = 31
     unhealthy_threshold = 10
-    matcher             = "200"
+    matcher             = "200-499"
   }
   stickiness {
     cookie_duration = 86400
@@ -95,7 +95,7 @@ resource "aws_ecs_task_definition" "task_definition" {
 
   vpc_id = var.vpc_id
 }
-
+/*
 resource "aws_lb_listener_rule" "rule" {
 
   listener_arn = var.listener
@@ -114,8 +114,8 @@ resource "aws_lb_listener_rule" "rule" {
     Name = var.service_name
   }
 }
+*/
 
- */
 resource "aws_ecs_service" "service" {
   depends_on                         = [aws_security_group.task_sg]
   name                               = var.service_name
