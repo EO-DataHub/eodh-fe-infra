@@ -93,27 +93,6 @@ resource "aws_lb_target_group" "service_tg" {
 
   vpc_id = var.vpc_id
 }
-/*
-resource "aws_lb_listener_rule" "rule" {
-
-  listener_arn = var.listener
-  priority     = var.rule_priority
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.service_tg.arn
-  }
-  condition {
-    path_pattern {
-      values = ["/${var.service_name}/*"]
-    }
-  }
-  tags = {
-    Name = var.service_name
-  }
-}
-*/
-
 resource "aws_ecs_service" "service" {
   depends_on                         = [aws_security_group.task_sg]
   name                               = var.service_name
