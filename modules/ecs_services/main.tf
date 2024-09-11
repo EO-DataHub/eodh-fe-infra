@@ -26,8 +26,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
-
-
 resource "aws_ecs_task_definition" "task_definition" {
   depends_on               = [aws_iam_role.ecs_task_execution_role]
   family                   = "${var.env}_${var.service_name}"
@@ -139,15 +137,6 @@ resource "aws_ecs_service" "service" {
     enable   = true
     rollback = true
   }
-  /*
-  ordered_placement_strategy {
-    field = "attribute:ecs.availability-zone"
-    type  = "spread"
-  }
-  ordered_placement_strategy {
-    field = "instanceId"
-    type  = "spread"
-  }*/
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = [aws_security_group.task_sg.id]
