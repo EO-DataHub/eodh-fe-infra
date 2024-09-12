@@ -13,6 +13,13 @@
   rule_priority     = "1"
   domain            = aws_route53_zone.test.name
 }*/
+module "alb" {
+  source          = "../modules/alb"
+  name            = "ac-api"
+  pub_alb_subnets = module.vpc_tests.pub_subnets
+  vpc_id          = module.vpc_tests.vpc_id
+  alb_cert_arn    = module.acm_alb.acm_cert_arn
+}
 module "ecs_service" {
   source = "../modules/ecs_services"
   for_each = {
@@ -32,18 +39,12 @@ module "ecs_service" {
   listener          = module.alb.listener_443
   # Increment rule_priority by the position of the environment in the list
   rule_priority = 1 + index(tolist(keys(var.environments)), each.key)
-
-  domain = aws_route53_zone.test.name
+  alb_sg        = module.alb.alb_sg_id
+  domain        = aws_route53_zone.test.name
 }
 module "ecs" {
   source       = "../modules/ecs"
   environments = var.environments
   vpc_id       = module.vpc_tests.vpc_id
 }
-module "alb" {
-  source          = "../modules/alb"
-  name            = "ac-api"
-  pub_alb_subnets = module.vpc_tests.pub_subnets
-  vpc_id          = module.vpc_tests.vpc_id
-  alb_cert_arn    = module.acm_alb.acm_cert_arn
-}
+

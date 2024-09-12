@@ -10,4 +10,7 @@ output "listener_80" {
 output "listener_443" {
   value = aws_lb_listener.listener_443.arn
 }
+output "alb_sg_id" {
+  value = aws_security_group.sg_pub_alb.id
+}
 

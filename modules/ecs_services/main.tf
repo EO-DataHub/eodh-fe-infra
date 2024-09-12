@@ -141,6 +141,15 @@ resource "aws_security_group" "task_sg" {
     Name = "${var.env}_${var.service_name}_sg"
   }
 }
+resource "aws_security_group_rule" "alb_to_ecs_service" {
+  description              = "alb_to_ecs_service"
+  security_group_id        = aws_security_group.task_sg.id
+  from_port                = 8000
+  to_port                  = 8000
+  protocol                 = "-1"
+  source_security_group_id = var.alb_sg
+  type                     = "ingress"
+}
 resource "aws_lb_listener_rule" "rule" {
 
   listener_arn = var.listener
