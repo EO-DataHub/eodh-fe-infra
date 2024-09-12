@@ -112,6 +112,12 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
+data "aws_cloudfront_origin_request_policy" "AllViewer" {
+  name = "Managed-AllViewer"
+}
+data "aws_cloudfront_cache_policy" "CachingDisabled" {
+  name = "Managed-CachingDisabled"
+}
 resource "aws_cloudfront_distribution" "cf_front" {
   web_acl_id = var.web_acl_arn
   comment    = "${var.env}.${var.domain}"
@@ -161,8 +167,8 @@ resource "aws_cloudfront_distribution" "cf_front" {
       viewer_protocol_policy   = "redirect-to-https"
       allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
       cached_methods           = ["GET", "HEAD", "OPTIONS"]
-      cache_policy_id          = "Managed-CachingOptimized"
-      origin_request_policy_id = "Managed-AllViewer"
+      cache_policy_id          = data.aws_cloudfront_cache_policy.CachingDisabled.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewer.id
       compress                 = false
       default_ttl              = 0
       max_ttl                  = 0
