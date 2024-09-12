@@ -114,13 +114,30 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 }
 resource "aws_cloudfront_distribution" "cf_front" {
   web_acl_id = var.web_acl_arn
-  comment = "${var.env}.${var.domain}"
+  comment    = "${var.env}.${var.domain}"
   origin {
     origin_id                = aws_s3_bucket.s3_cf.bucket_regional_domain_name
     connection_attempts      = 3
     connection_timeout       = 10
     domain_name              = aws_s3_bucket.s3_cf.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+  }
+  dynamic "origin" {
+    for_each = var.env != "storybook" ? [var.api_alb] : []
+    content {
+      origin_id           = origin.value
+      connection_attempts = 3
+      connection_timeout  = 10
+      domain_name         = origin.value
+      custom_origin_config {
+        http_port                = 80
+        https_port               = 443
+        origin_protocol_policy   = "match-viewer"
+        origin_keepalive_timeout = 5
+        origin_read_timeout      = 30
+        origin_ssl_protocols     = ["TLSv1.2"]
+      }
+    }
   }
   enabled         = true
   is_ipv6_enabled = true
@@ -135,6 +152,25 @@ resource "aws_cloudfront_distribution" "cf_front" {
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
+  }
+  dynamic "ordered_cache_behavior" {
+    for_each = var.env != "storybook" ? [var.api_alb] : []
+    content {
+      path_pattern             = "/api/*"
+      target_origin_id         = var.api_alb
+      viewer_protocol_policy   = "redirect-to-https"
+      allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+      cached_methods           = ["GET", "HEAD", "OPTIONS"]
+      cache_policy_id          = "CachingDisabled"
+      origin_request_policy_id = "AllViewer"
+      compress                 = false
+      default_ttl              = 0
+      max_ttl                  = 0
+      min_ttl                  = 0
+      smooth_streaming         = false
+      trusted_signers          = []
+      trusted_key_groups       = []
+    }
   }
 
   price_class = "PriceClass_All"

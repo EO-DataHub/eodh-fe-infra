@@ -102,7 +102,6 @@ resource "aws_ecs_service" "service" {
   wait_for_steady_state              = false
   enable_ecs_managed_tags            = true
   deployment_minimum_healthy_percent = 100
-  //launch_type                        = "FARGATE"
   capacity_provider_strategy {
     capacity_provider = "FARGATE"
     base              = 1
@@ -148,15 +147,21 @@ resource "aws_lb_listener_rule" "rule" {
   priority     = var.rule_priority
 
   action {
+    order            = var.rule_priority
     type             = "forward"
     target_group_arn = aws_lb_target_group.service_tg.arn
   }
   condition {
     path_pattern {
-      values = ["/*"]
+      values = ["/api/*"]
+    }
+  }
+  condition {
+    host_header {
+      values = ["${var.env}.${var.domain}"]
     }
   }
   tags = {
-    Name = var.service_name
+    Name = var.env
   }
 }
