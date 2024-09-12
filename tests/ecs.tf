@@ -13,7 +13,7 @@
   rule_priority     = "1"
   domain            = aws_route53_zone.test.name
 }*/
-/*module "ecs_service" {
+module "ecs_service" {
   source = "../modules/ecs_services"
   for_each = {
     for env_name, env_data in var.environments : env_name => env_data
@@ -31,10 +31,10 @@
   subnet_ids        = module.vpc_tests.priv_subnets
   listener          = module.alb.listener_443
   # Increment rule_priority by the position of the environment in the list
-  rule_priority     = 1 + index(tolist(keys(var.environments)), each.key)
+  rule_priority = 1 + index(tolist(keys(var.environments)), each.key)
 
-  domain            = aws_route53_zone.test.name
-}*/
+  domain = aws_route53_zone.test.name
+}
 module "ecs" {
   source       = "../modules/ecs"
   environments = var.environments
