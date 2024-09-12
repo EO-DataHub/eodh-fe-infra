@@ -161,8 +161,8 @@ resource "aws_cloudfront_distribution" "cf_front" {
       viewer_protocol_policy   = "redirect-to-https"
       allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
       cached_methods           = ["GET", "HEAD", "OPTIONS"]
-      cache_policy_id          = "CachingDisabled"
-      origin_request_policy_id = "AllViewer"
+      cache_policy_id          = "Managed-CachingOptimized"
+      origin_request_policy_id = "Managed-AllViewer"
       compress                 = false
       default_ttl              = 0
       max_ttl                  = 0
