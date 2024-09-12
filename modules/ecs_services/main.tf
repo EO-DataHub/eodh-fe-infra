@@ -146,7 +146,7 @@ resource "aws_security_group_rule" "alb_to_ecs_service" {
   security_group_id        = aws_security_group.task_sg.id
   from_port                = 8000
   to_port                  = 8000
-  protocol                 = "-1"
+  protocol                 = "tcp"
   source_security_group_id = var.alb_sg
   type                     = "ingress"
 }
