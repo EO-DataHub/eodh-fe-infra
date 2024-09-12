@@ -77,13 +77,13 @@ resource "aws_lb_target_group" "service_tg" {
   protocol             = "HTTP"
   target_type          = "ip"
   health_check {
-    path                = "/"
+    path                = var.healthcheck_path
     protocol            = "HTTP"
     healthy_threshold   = 2
     timeout             = 10
     interval            = 31
     unhealthy_threshold = 10
-    matcher             = "200-499"
+    matcher             = "200"
   }
   stickiness {
     cookie_duration = 86400
