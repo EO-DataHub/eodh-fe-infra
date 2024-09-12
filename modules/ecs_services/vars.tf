@@ -1,5 +1,5 @@
 variable "service_name" {}
-//variable "execution_role" {}
+variable "domain" {}
 variable "env" {}
 variable "service_port" {}
 variable "cpu_allocation" {}
