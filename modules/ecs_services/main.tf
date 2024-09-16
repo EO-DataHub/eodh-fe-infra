@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   container_definitions = jsonencode([
     {
       name : "${var.env}_${var.service_name}",
-      image : "${var.ecr_repo}/${var.service_name}:latest", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
+      image : "${var.ecr_repo}/${var.service_name}:${var.env}", //image : "${var.ecr_repo}/${var.service_name}:${var.env}",
       cpu : var.cpu_allocation,
       memoryReservation : var.memory_allocation,
       essential : true,
