@@ -3,12 +3,13 @@ resource "aws_s3_bucket" "env_files" {
   bucket = "ukri-task-definition-variables"
 }
 resource "aws_s3_object" "env_files_dir" {
+  depends_on = [aws_s3_bucket.env_files]
   for_each = {
     for env_name, env_data in var.environments : env_name => env_data
     if env_data.create_ecs == true
   }
   bucket   = aws_s3_bucket.env_files.id
-  key      = "${each.key}/envs"
+  key      = "${each.key}/envs.env"
   provider = aws
 }
 module "alb" {
@@ -19,7 +20,8 @@ module "alb" {
   alb_cert_arn    = module.acm_alb.acm_cert_arn
 }
 module "ecs_service" {
-  source = "../modules/ecs_services"
+  depends_on = [aws_s3_bucket.env_files]
+  source     = "../modules/ecs_services"
   for_each = {
     for env_name, env_data in var.environments : env_name => env_data
     if env_data.create_ecs == true
@@ -39,6 +41,7 @@ module "ecs_service" {
   rule_priority = 1 + index(tolist(keys(var.environments)), each.key)
   alb_sg        = module.alb.alb_sg_id
   domain        = aws_route53_zone.test.name
+  s3_env_files  = "${aws_s3_bucket.env_files.arn}/${each.value.name}.env"
 }
 module "ecs" {
   source       = "../modules/ecs"
