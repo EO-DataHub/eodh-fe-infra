@@ -1,3 +1,16 @@
+
+resource "aws_s3_bucket" "env_files" {
+  bucket = "ukri-task-definition-variables"
+}
+resource "aws_s3_object" "env_files_dir" {
+  for_each = {
+    for env_name, env_data in var.environments : env_name => env_data
+    if env_data.create_ecs == true
+  }
+  bucket   = aws_s3_bucket.env_files.id
+  key      = "${each.key}/envs"
+  provider = aws
+}
 module "alb" {
   source          = "../modules/alb"
   name            = "ac-api"
