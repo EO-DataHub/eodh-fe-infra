@@ -38,10 +38,10 @@ module "ecs_service" {
   subnet_ids        = module.vpc_tests.priv_subnets
   listener          = module.alb.listener_443
   # Increment rule_priority by the position of the environment in the list
-  rule_priority = 1 + index(tolist(keys(var.environments)), each.key)
-  alb_sg        = module.alb.alb_sg_id
-  domain        = aws_route53_zone.test.name
-  s3_env_files  = "${aws_s3_bucket.env_files.arn}/${each.value.name}.env"
+  rule_priority    = 1 + index(tolist(keys(var.environments)), each.key)
+  alb_sg           = module.alb.alb_sg_id
+  domain           = aws_route53_zone.test.name
+  s3_arn_env_files = aws_s3_bucket.env_files.arn
 }
 module "ecs" {
   source       = "../modules/ecs"

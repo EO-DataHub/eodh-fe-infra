@@ -19,4 +19,4 @@ variable "desired_task_count" { default = 1 }
 variable "healthcheck_path" { default = "/api/v1.0/docs" }
 variable "region" {}
 variable "alb_sg" {}
-variable "s3_env_files" {}
+variable "s3_arn_env_files" {}

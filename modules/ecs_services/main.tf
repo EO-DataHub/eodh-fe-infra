@@ -26,6 +26,28 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+resource "aws_iam_policy" "s3_bucket_access_policy" {
+  name = "S3BucketAccessPolicy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Effect   = "Allow"
+        Resource = "${var.s3_arn_env_files}/*"
+      },
+      {
+        Action   = "s3:ListBucket"
+        Effect   = "Allow"
+        Resource = var.s3_arn_env_files
+      }
+    ]
+  })
+}
 resource "aws_ecs_task_definition" "task_definition" {
   depends_on               = [aws_iam_role.ecs_task_execution_role]
   family                   = "${var.env}_${var.service_name}"
@@ -64,7 +86,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       },
       environmentFiles : [
         {
-          value : var.s3_env_files
+          value : "${var.s3_arn_env_files}/${var.env}/envs.env"
           type : "s3"
         }
       ]
