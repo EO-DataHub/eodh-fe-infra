@@ -8,9 +8,11 @@ resource "aws_s3_object" "env_files_dir" {
     for env_name, env_data in var.environments : env_name => env_data
     if env_data.create_ecs == true
   }
-  bucket   = aws_s3_bucket.env_files.id
-  key      = "${each.key}/envs.env"
-  provider = aws
+  bucket = aws_s3_bucket.env_files.id
+  key    = "${each.key}/envs.env"
+  lifecycle {
+    ignore_changes = [tags_all]
+  }
 }
 module "alb" {
   source          = "../modules/alb"
