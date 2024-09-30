@@ -119,8 +119,9 @@ data "aws_cloudfront_cache_policy" "CachingDisabled" {
   name = "Managed-CachingDisabled"
 }
 resource "aws_cloudfront_distribution" "cf_front" {
-  web_acl_id = var.web_acl_arn
-  comment    = "${var.env}.${var.domain}"
+  web_acl_id          = var.web_acl_arn
+  comment             = "${var.env}.${var.domain}"
+  default_root_object = "index.html"
   origin {
     origin_id                = aws_s3_bucket.s3_cf.bucket_regional_domain_name
     connection_attempts      = 3
@@ -195,7 +196,7 @@ resource "aws_cloudfront_distribution" "cf_front" {
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-  custom_error_response {
+  /*  custom_error_response {
     error_code            = 403
     error_caching_min_ttl = 10
     response_code         = 200
@@ -206,7 +207,7 @@ resource "aws_cloudfront_distribution" "cf_front" {
     error_caching_min_ttl = 10
     response_code         = 200
     response_page_path    = "/index.html"
-  }
+  }*/
 }
 resource "aws_route53_record" "front" {
   zone_id = var.route53_zone_id
