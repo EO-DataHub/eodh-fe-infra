@@ -13,13 +13,13 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.91.0"
+      version = "~> 5.53.0"
     }
   }
   cloud {
     organization = "EODH"
     workspaces {
-      name = "tests-eodh-fe-infra"
+      name = "prod-eodh-fe-infra"
     }
   }
 }
