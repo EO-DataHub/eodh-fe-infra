@@ -1,6 +1,6 @@
 
 resource "aws_s3_bucket" "env_files" {
-  bucket = "ukri-task-definition-variables"
+  bucket = "prod-ukri-task-definition-variables"
 }
 resource "aws_s3_object" "env_files_dir" {
   depends_on = [aws_s3_bucket.env_files]
