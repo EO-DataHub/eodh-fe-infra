@@ -1,4 +1,4 @@
-/*
+
 resource "aws_s3_bucket" "env_files" {
   bucket = "ukri-task-definition-variables"
 }
@@ -51,4 +51,3 @@ module "ecs" {
   vpc_id       = module.vpc.vpc_id
 }
 
-*/
