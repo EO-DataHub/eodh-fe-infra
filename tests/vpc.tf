@@ -1,4 +1,4 @@
-module "vpc_tests" {
+/*module "vpc_tests" {
   source              = "../modules/vpc"
   vpc-cidr            = "10.104.8.0/23"
   env                 = "tests"
@@ -26,16 +26,16 @@ module "vpc_tests" {
       az   = "us-east-1b"
     }
   }
-}
-/*module "vpc" {
+}*/
+module "vpc" {
   source                             = "terraform-aws-modules/vpc/aws"
   name                               = "ukri"
   single_nat_gateway                 = true
   enable_nat_gateway                 = true
   cidr                               = "10.104.8.0/23"
-  azs                                = ["us-east-1a", "us-east-1b"] # Availability Zones to use
-  public_subnets                     = ["10.104.8.0/26", "10.104.8.64/26"]        # Public subnet CIDRs
-  private_subnets                    = ["10.104.8.128/26", "10.104.8.192/26"]     # Private subnet CIDRs
+  azs                                = ["us-east-1a", "us-east-1b"]           # Availability Zones to use
+  public_subnets                     = ["10.104.8.0/26", "10.104.8.64/26"]    # Public subnet CIDRs
+  private_subnets                    = ["10.104.8.128/26", "10.104.8.192/26"] # Private subnet CIDRs
   create_database_subnet_route_table = false
 }
 import {
@@ -105,7 +105,7 @@ import {
 import {
   to = module.vpc.aws_route.private_nat_gateway[0]
   id = "rtb-03137bfb6d85e7629_0.0.0.0/0"
-}*/
+}
 /*import {
   to = module.vpc.aws_default_route_table.default[0]
   id = "rtb-0713b17929707712b"

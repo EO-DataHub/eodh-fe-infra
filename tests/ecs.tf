@@ -17,8 +17,8 @@ resource "aws_s3_object" "env_files_dir" {
 module "alb" {
   source          = "../modules/alb"
   name            = "ac-api"
-  pub_alb_subnets = module.vpc_tests.pub_subnets
-  vpc_id          = module.vpc_tests.vpc_id
+  pub_alb_subnets = module.vpc.public_subnets
+  vpc_id          = module.vpc.vpc_id
   alb_cert_arn    = module.acm_alb.acm_cert_arn
 }
 module "ecs_service" {
@@ -36,8 +36,8 @@ module "ecs_service" {
   service_name      = "ac-api"
   service_port      = "8000"
   region            = var.region
-  vpc_id            = module.vpc_tests.vpc_id
-  subnet_ids        = module.vpc_tests.priv_subnets
+  vpc_id            = module.vpc.vpc_id
+  subnet_ids        = module.vpc.private_subnets
   listener          = module.alb.listener_443
   # Increment rule_priority by the position of the environment in the list
   rule_priority    = 1 + index(tolist(keys(var.environments)), each.key)
@@ -48,6 +48,6 @@ module "ecs_service" {
 module "ecs" {
   source       = "../modules/ecs"
   environments = var.environments
-  vpc_id       = module.vpc_tests.vpc_id
+  vpc_id       = module.vpc.vpc_id
 }
 
