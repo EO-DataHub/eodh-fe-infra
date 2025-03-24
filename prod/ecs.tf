@@ -21,6 +21,17 @@ module "alb" {
   vpc_id          = module.vpc.vpc_id
   alb_cert_arn    = module.acm_alb.acm_cert_arn
 }
+resource "aws_route53_record" "api" {
+  depends_on = [module.alb]
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "api.${aws_route53_zone.main.name}"
+  type    = "A"
+  alias {
+    evaluate_target_health = false
+    name                   = "dualstack.${module.alb.alb_name}"
+    zone_id                = module.alb.alb_zone_id
+  }
+}
 module "ecs_service" {
   depends_on = [aws_s3_bucket.env_files]
   source     = "../modules/ecs_services"

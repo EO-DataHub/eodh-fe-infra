@@ -1,6 +1,9 @@
 output "alb_id" {
   value = aws_lb.alb.id
 }
+output "alb_zone_id" {
+  value = aws_lb.alb.zone_id
+}
 output "alb_name" {
   value = aws_lb.alb.dns_name
 }
