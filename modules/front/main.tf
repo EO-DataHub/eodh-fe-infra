@@ -27,9 +27,9 @@ resource "aws_route53_record" "cert_validation" {
 }
 // S3 front
 resource "aws_s3_bucket" "s3_cf" {
-  bucket = "${var.env}.${var.domain}"
+  bucket = var.env == "prod" ? var.domain : "${var.env}.${var.domain}"
   tags = {
-    Name = "${var.env}.${var.domain}"
+    Name = var.env == "prod" ? var.domain : "${var.env}.${var.domain}"
   }
 }
 resource "aws_s3_bucket_policy" "cf_s3_acc" {
