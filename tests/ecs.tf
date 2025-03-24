@@ -32,10 +32,7 @@ resource "aws_route53_record" "api" {
     zone_id                = module.alb.alb_zone_id
   }
 }
-import {
-  to = aws_route53_record.api
-  id = "Z0442300JCTJJLA8G2B5_api.lot2.eodatahub.org.uk_A"
-}
+
 module "ecs_service" {
   depends_on = [aws_s3_bucket.env_files]
   source     = "../modules/ecs_services"
