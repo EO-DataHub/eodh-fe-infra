@@ -1,6 +1,6 @@
 resource "aws_acm_certificate" "cert" {
-  domain_name               = "${var.env}.${var.domain}"
-  subject_alternative_names = ["*.${var.env}.${var.domain}"]
+  domain_name               = var.env == "prod" ? var.domain : "${var.env}.${var.domain}"
+  subject_alternative_names = [var.env == "prod" ? "*.${var.domain}" : "*.${var.env}.${var.domain}"]
   validation_method         = "DNS"
 
   tags = {
@@ -120,7 +120,7 @@ data "aws_cloudfront_cache_policy" "CachingDisabled" {
 }
 resource "aws_cloudfront_distribution" "cf_front" {
   web_acl_id          = var.web_acl_arn
-  comment             = "${var.env}.${var.domain}"
+  comment             = var.env == "prod" ? var.domain : "${var.env}.${var.domain}"
   default_root_object = "index.html"
   origin {
     origin_id                = aws_s3_bucket.s3_cf.bucket_regional_domain_name
@@ -148,7 +148,7 @@ resource "aws_cloudfront_distribution" "cf_front" {
   }
   enabled         = true
   is_ipv6_enabled = true
-  aliases         = ["${var.env}.${var.domain}"]
+  aliases         = [var.env == "prod" ? var.domain : "*.${var.env}.${var.domain}"]
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
@@ -211,7 +211,7 @@ resource "aws_cloudfront_distribution" "cf_front" {
 }
 resource "aws_route53_record" "front" {
   zone_id = var.route53_zone_id
-  name    = "${var.env}.${var.domain}"
+  name    = var.env == "prod" ? var.domain : "${var.env}.${var.domain}"
   type    = "A"
   alias {
     evaluate_target_health = false
