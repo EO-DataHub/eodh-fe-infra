@@ -148,7 +148,7 @@ resource "aws_cloudfront_distribution" "cf_front" {
   }
   enabled         = true
   is_ipv6_enabled = true
-  aliases         = [var.env == "prod" ? var.domain : "*.${var.env}.${var.domain}"]
+  aliases         = [var.env == "prod" ? var.domain : "${var.env}.${var.domain}"]
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
