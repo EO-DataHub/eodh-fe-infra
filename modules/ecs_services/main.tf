@@ -199,7 +199,13 @@ resource "aws_lb_listener_rule" "rule" {
   }
   condition {
     host_header {
-      values = ["${var.env}.${var.domain}"]
+      values = var.env == "prod" ? [var.domain] : ["${var.env}.${var.domain}"]
+    }
+  }
+  condition {
+    http_header {
+      http_header_name = "${var.env}-X-Custom-Header"
+      values           = ["${var.env}-cf-to-lb"]
     }
   }
   tags = {

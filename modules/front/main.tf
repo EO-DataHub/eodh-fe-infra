@@ -136,6 +136,10 @@ resource "aws_cloudfront_distribution" "cf_front" {
       connection_attempts = 3
       connection_timeout  = 10
       domain_name         = origin.value
+      custom_header {
+        name  = "${var.env}-X-Custom-Header"
+        value = "${var.env}-cf-to-lb"
+      }
       custom_origin_config {
         http_port                = 80
         https_port               = 443
