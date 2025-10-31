@@ -46,6 +46,7 @@ module "ecs_service" {
   memory_allocation = 512
   service_name      = "ac-api"
   service_port      = "8000"
+  healthcheck_path = "/api/v1.0/health/ping"
   region            = var.region
   vpc_id            = module.vpc.vpc_id
   subnet_ids        = module.vpc.private_subnets

@@ -16,7 +16,7 @@ variable "ecs_td_secrets" { default = null }
 variable "repo_name" { default = null }
 variable "task_role_arn" { default = null }
 variable "desired_task_count" { default = 1 }
-variable "healthcheck_path" { default = "/api/v1.0/health/ping" }
+variable "healthcheck_path" { default = "/api/latest/health/ping" } ///api/latest/health/ping
 variable "region" {}
 variable "alb_sg" {}
 variable "s3_arn_env_files" {}
